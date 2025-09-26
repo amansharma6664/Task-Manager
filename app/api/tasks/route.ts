@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "../../lib/mongodb";
-import Task from "../../lib/models/Task";
+import Task from "../../lib/models/Tasks";
 import { verifyToken } from "../../lib/auth";
 
 async function getUser(req: Request) {
