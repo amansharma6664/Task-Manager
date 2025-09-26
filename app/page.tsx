@@ -43,10 +43,11 @@ export default function Home() {
           setToken(data.token);
         } else alert(data.error || "Login failed");
       }
-    } catch (err: any) {
-      console.error("Auth error:", err);
-      alert("Something went wrong. Check console.");
-    }
+    } catch (err: unknown) {
+  console.error("Auth error:", err);
+  alert("Something went wrong. Check console.");
+}
+
   };
 
   const logout = () => {

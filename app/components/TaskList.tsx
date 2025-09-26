@@ -7,7 +7,16 @@ interface Props {
 }
 
 export default function TaskList({ token, refreshKey }: Props) {
-  const [tasks, setTasks] = useState<any[]>([]);
+  interface Task {
+  _id: string;
+  title: string;
+  description?: string;
+  status?: string;
+  userId: string;
+}
+
+const [tasks, setTasks] = useState<Task[]>([]);
+
   const [loading, setLoading] = useState(true);
 
  const fetchTasks = async () => {
@@ -22,7 +31,6 @@ export default function TaskList({ token, refreshKey }: Props) {
     } else if (data.task) {
       setTasks([data.task]); // POST ke response ke liye
     } else {
-    //   console.error("Unexpected response:", data);
       setTasks([]);
     }
 
