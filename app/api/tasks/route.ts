@@ -16,7 +16,10 @@ export async function GET(req: Request) {
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const tasks = await Task.find({ userId: (user as any).id });
+  console.log("User from token:", user);
+
   return NextResponse.json(tasks);
+  
 }
 
 export async function POST(req: Request) {
