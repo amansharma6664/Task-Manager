@@ -114,10 +114,7 @@ export default function Home() {
           >
             Logout
           </button>
-
-          {/* <TaskForm token={token} refresh={refresh} />
-          <TaskList token={token} key={refreshKey} refreshKey={0} /> */}
-
+          
           <TaskForm token={token} refresh={() => setRefreshKey(prev => prev + 1)} />
 <TaskList token={token} refreshKey={refreshKey} />
 

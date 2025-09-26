@@ -51,3 +51,22 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
+
+// app/api/tasks/route.ts
+export async function DELETE(req: Request) {
+  await connectDB();
+  const user = (await getUser(req)) as { id: string } | null;
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  try {
+    const body = await req.json();
+    const taskId = body.id;
+
+    const deletedTask = await Task.findOneAndDelete({ _id: taskId, userId: user.id });
+    if (!deletedTask) return NextResponse.json({ error: "Task not found" }, { status: 404 });
+
+    return NextResponse.json({ message: "Task deleted" });
+  } catch (err: unknown) {
+    return NextResponse.json({ error: "Delete failed" }, { status: 500 });
+  }
+}
