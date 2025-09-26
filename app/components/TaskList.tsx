@@ -46,18 +46,6 @@ const [tasks, setTasks] = useState<Task[]>([]);
     if (token) fetchTasks();
   }, [token, refreshKey]);
 
-//   const deleteTask = async (id: string) => {
-//     await fetch("/api/tasks", {
-//       method: "DELETE",
-//       headers: {
-//         "Content-Type": "application/json",
-//         Authorization: `Bearer ${token}`,
-//       },
-//       body: JSON.stringify({ id }),
-//     });
-//     fetchTasks();
-//   };
-
 const deleteTask = async (id: string) => {
   try {
     const res = await fetch("/api/tasks", {
@@ -89,7 +77,7 @@ const deleteTask = async (id: string) => {
   if (tasks.length === 0) return <p>No tasks added yet.</p>;
 
   return (
-    // <div className="space-y-4">
+    //  <div className="space-y-4">
     //   {tasks.map((task) => (
     //     <div
     //       key={task._id}
@@ -100,42 +88,54 @@ const deleteTask = async (id: string) => {
     //         <p>{task.description}</p>
     //         <span className="text-xs italic">{task.status}</span>
     //       </div>
-    //       <button
-    //         onClick={() => deleteTask(task._id)}
-    //         className="bg-red-600 px-3 py-1 rounded text-white"
-    //       >
-    //         Delete
-    //       </button>
+    //       <div className="flex space-x-2">
+    //         <button
+    //           onClick={() => deleteTask(task._id)}
+    //           className="bg-red-600 px-3 py-1 rounded text-white"
+    //         >
+    //           Delete
+    //         </button>
+    //         <button
+    //           onClick={() => alert("Edit feature coming soon")}
+    //           className="bg-yellow-500 px-3 py-1 rounded text-white"
+    //         >
+    //           Edit
+    //         </button>
+    //       </div>
     //     </div>
     //   ))}
     // </div>
+
      <div className="space-y-4">
-      {tasks.map((task) => (
-        <div
-          key={task._id}
-          className="bg-gray-200 p-4 rounded flex justify-between items-center shadow-md"
-        >
-          <div>
-            <h3 className="font-bold">{task.title}</h3>
-            <p>{task.description}</p>
-            <span className="text-xs italic">{task.status}</span>
-          </div>
-          <div className="flex space-x-2">
-            <button
-              onClick={() => deleteTask(task._id)}
-              className="bg-red-600 px-3 py-1 rounded text-white"
-            >
-              Delete
-            </button>
-            <button
-              onClick={() => alert("Edit feature coming soon")}
-              className="bg-yellow-500 px-3 py-1 rounded text-white"
-            >
-              Edit
-            </button>
-          </div>
+    {tasks.map((task) => (
+      <div
+        key={task._id}
+        className="bg-gray-200 p-4 rounded flex justify-between items-center shadow-md"
+      >
+        <div>
+          <h3 className="font-bold">{task.title}</h3>
+          <p>{task.description}</p>
+          <span className="text-xs italic">{task.status}</span>
         </div>
-      ))}
-    </div>
+        <div className="flex space-x-2">
+          {/* 🔴 Ye Delete button hai */}
+          <button
+            onClick={() => deleteTask(task._id.toString())} // yaha .toString() use karo
+            className="bg-red-600 px-3 py-1 rounded text-white"
+          >
+            Delete
+          </button>
+
+          {/* Edit button placeholder */}
+          <button
+            onClick={() => alert("Edit feature coming soon")}
+            className="bg-yellow-500 px-3 py-1 rounded text-white"
+          >
+            Edit
+          </button>
+        </div>
+      </div>
+    ))}
+  </div>
   );
 }
