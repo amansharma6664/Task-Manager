@@ -70,12 +70,6 @@ export default function TaskList({ token, tasks, refresh, refreshKey }: Props) {
               <p className="text-gray-700">{task.description}</p>
             </div>
             <div className="flex space-x-2">
-              {/* <button
-                onClick={() => handleEdit(task)}
-                className="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-white"
-              >
-                Edit
-              </button> */}
               <button
   onClick={() => onEdit?.(task._id, task.title, task.description)}
   className="bg-yellow-500 px-3 py-1 rounded text-white hover:bg-yellow-600"

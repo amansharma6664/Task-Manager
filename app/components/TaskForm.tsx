@@ -31,67 +31,51 @@ export default function TaskForm({
     }
   }, [editTaskId, editData]);
 
-  // submit handler
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   if (!title.trim()) return;
+//   const handleSubmit = async (e: React.FormEvent) => {
+//   e.preventDefault();
+//   if (!title) return;
 
-  //   try {
-  //     const url = editTaskId ? `/api/tasks/${editTaskId}` : "/api/tasks";
-  //     const method = editTaskId ? "PUT" : "POST";
+//   if (editTaskId && updateTask) {
+//     // 👈 Edit mode: call updateTask from prop
+//     await updateTask(editTaskId, title, description);
+//   } else {
+//     // 👈 Add mode: create new task
+//     await fetch("/api/tasks", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//         Authorization: `Bearer ${token}`,
+//       },
+//       body: JSON.stringify({ title, description }),
+//     });
+//   }
 
-  //     const res = await fetch(url, {
-  //       method,
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //       body: JSON.stringify({ title, description }),
-  //     });
+//   setTitle("");
+//   setDescription("");
+//   refresh();
 
-  //     if (!res.ok) {
-  //       const errorData = await res.json();
-  //       console.error("Error:", errorData);
-  //       return;
-  //     }
+//   // cancel edit mode after update
+//   if (cancelEdit) cancelEdit();
+// };
 
-  //     // reset fields
-  //     setTitle("");
-  //     setDescription("");
-  //     refresh();
-
-  //     // edit cancel after update
-  //     if (cancelEdit) cancelEdit();
-  //   } catch (err) {
-  //     console.error("Submit failed:", err);
-  //   }
-  // };
-
-  const handleSubmit = async (e: React.FormEvent) => {
+const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
   if (!title) return;
 
-  if (editTaskId && updateTask) {
-    // 👈 Edit mode: call updateTask from prop
-    await updateTask(editTaskId, title, description);
-  } else {
-    // 👈 Add mode: create new task
-    await fetch("/api/tasks", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ title, description }),
-    });
-  }
+  const url = editTaskId ? `/api/tasks/${editTaskId}` : "/api/tasks";
+  const method = editTaskId ? "PUT" : "POST";
 
-  setTitle("");
-  setDescription("");
+  await fetch(url, {
+    method,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ title, description }),
+  });
+
   refresh();
-
-  // cancel edit mode after update
-  if (cancelEdit) cancelEdit();
+  cancelEdit?.();
 };
 
 
