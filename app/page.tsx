@@ -147,13 +147,14 @@ export default function Home() {
           )}
 
          <TaskList
-  token={token}
-  refreshKey={refreshKey}
-  onEdit={(id, title, description) => {
-    setEditTaskId(id);
-    setEditData({ title, description });
-  }}
-/>
+              token={token}
+              refreshKey={refreshKey}
+              onEdit={(id, title, description) => {
+                setEditTaskId(id);
+                setEditData({ title, description });
+              } } tasks={[]} refresh={function (): void {
+                throw new Error("Function not implemented.");
+              } }/>
 
         </div>
       )}
