@@ -69,12 +69,19 @@ const deleteTask = async (id: string) => {
             >
               Delete
             </button>
-            <button
+            {/* <button
               onClick={() => onEdit?.(task._id, task.title, task.description)}
               className="bg-yellow-500 px-3 py-1 rounded text-white hover:bg-yellow-600"
             >
               Edit
-            </button>
+            </button> */}
+            <button
+  onClick={() => onEdit?.(task._id, task.title, task.description)}
+  className="bg-yellow-500 px-3 py-1 rounded text-white hover:bg-yellow-600"
+>
+  Edit
+</button>
+
           </div>
         </div>
       ))}
