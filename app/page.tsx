@@ -146,14 +146,15 @@ export default function Home() {
             <TaskForm token={token} refresh={refresh} />
           )}
 
-          <TaskList
-            token={token}
-            refreshKey={refreshKey}
-            onEdit={(id, title, description) => {
-              setEditTaskId(id);
-              setEditData({ title, description });
-            }}
-          />
+         <TaskList
+  token={token}
+  refreshKey={refreshKey}
+  onEdit={(id, title, description) => {
+    setEditTaskId(id);
+    setEditData({ title, description });
+  }}
+/>
+
         </div>
       )}
     </div>
