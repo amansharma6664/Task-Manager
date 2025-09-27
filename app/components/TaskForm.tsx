@@ -31,33 +31,6 @@ export default function TaskForm({
     }
   }, [editTaskId, editData]);
 
-//   const handleSubmit = async (e: React.FormEvent) => {
-//   e.preventDefault();
-//   if (!title) return;
-
-//   if (editTaskId && updateTask) {
-//     // 👈 Edit mode: call updateTask from prop
-//     await updateTask(editTaskId, title, description);
-//   } else {
-//     // 👈 Add mode: create new task
-//     await fetch("/api/tasks", {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//         Authorization: `Bearer ${token}`,
-//       },
-//       body: JSON.stringify({ title, description }),
-//     });
-//   }
-
-//   setTitle("");
-//   setDescription("");
-//   refresh();
-
-//   // cancel edit mode after update
-//   if (cancelEdit) cancelEdit();
-// };
-
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
   if (!title) return;

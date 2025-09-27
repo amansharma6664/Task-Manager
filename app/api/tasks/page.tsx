@@ -17,7 +17,9 @@ export default function TasksPage() {
     <div className="max-w-2xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-4">Task Manager</h1>
       <TaskForm token={token} refresh={() => {}} />
-      <TaskList token={token} />
+      <TaskList token={token} tasks={[]} refresh={function (): void {
+        throw new Error("Function not implemented.");
+      } } />
     </div>
   );
 }
