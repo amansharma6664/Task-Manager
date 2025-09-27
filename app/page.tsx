@@ -1,3 +1,65 @@
+// "use client";
+// import { useState, useEffect } from "react";
+// import TaskForm from "./components/TaskForm";
+// import TaskList from "./components/TaskList";
+
+// export default function Home() {
+//   const [token, setToken] = useState<string | null>(null);
+//   const [editTaskId, setEditTaskId] = useState<string | null>(null);
+//   const [editData, setEditData] = useState<{ title: string; description: string } | null>(null);
+//   const [refreshKey, setRefreshKey] = useState(0);
+
+//   const refresh = () => setRefreshKey((prev) => prev + 1);
+
+//   useEffect(() => {
+//     const t = localStorage.getItem("token");
+//     if (t) setToken(t);
+//   }, []);
+
+//   if (!token) return <p>Please login to see tasks</p>;
+
+//   return (
+//     <div className="min-h-screen bg-gray-100 text-black flex flex-col items-center p-6">
+//       <h1 className="text-2xl font-bold mb-4">Task Manager</h1>
+
+//       {/* Conditional rendering: Edit mode */}
+//       {editTaskId ? (
+//         <TaskForm
+//           token={token}
+//           refresh={refresh}
+//           editTaskId={editTaskId}
+//           editData={editData!}
+//           cancelEdit={() => setEditTaskId(null)}
+//           updateTask={async (id, title, description) => {
+//             await fetch(`/api/tasks/${id}`, {
+//               method: "PUT",
+//               headers: {
+//                 "Content-Type": "application/json",
+//                 Authorization: `Bearer ${token}`,
+//               },
+//               body: JSON.stringify({ title, description }),
+//             });
+//             setEditTaskId(null);
+//             refresh();
+//           }}
+//         />
+//       ) : (
+//         <TaskForm token={token} refresh={refresh} />
+//       )}
+
+//       <TaskList
+//         token={token}
+//         refreshKey={refreshKey}
+//         onEdit={(id, title, description) => {
+//           setEditTaskId(id);
+//           setEditData({ title, description });
+//         }}
+//       />
+//     </div>
+//   );
+// }
+
+
 "use client";
 import { useState, useEffect } from "react";
 import TaskForm from "./components/TaskForm";
@@ -5,12 +67,14 @@ import TaskList from "./components/TaskList";
 
 export default function Home() {
   const [token, setToken] = useState<string | null>(null);
+  const [editTaskId, setEditTaskId] = useState<string | null>(null);
+  const [editData, setEditData] = useState<{ title: string; description: string } | null>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [mode, setMode] = useState<"login" | "signup">("login");
 
-  const [refreshKey, setRefreshKey] = useState(0);
   const refresh = () => setRefreshKey((prev) => prev + 1);
 
   useEffect(() => {
@@ -26,28 +90,31 @@ export default function Home() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ username, email, password }),
         });
-        const data = await res.json().catch(() => ({ error: "Invalid server response" }));
+        const data = await res.json();
         if (res.ok) {
           alert("Signup successful! Please login.");
           setMode("login");
-        } else alert(data.error || "Signup failed");
+        } else {
+          alert(data.error || "Signup failed");
+        }
       } else {
         const res = await fetch("/api/auth/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password }),
         });
-        const data = await res.json().catch(() => ({ error: "Invalid server response" }));
+        const data = await res.json();
         if (res.ok) {
           localStorage.setItem("token", data.token);
           setToken(data.token);
-        } else alert(data.error || "Login failed");
+        } else {
+          alert(data.error || "Login failed");
+        }
       }
-    } catch (err: unknown) {
-  console.error("Auth error:", err);
-  alert("Something went wrong. Check console.");
-}
-
+    } catch (err) {
+      console.error("Auth error:", err);
+      alert("Something went wrong. Check console.");
+    }
   };
 
   const logout = () => {
@@ -56,11 +123,12 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-black flex flex-col items-center p-6">
-      <h1 className="text-3xl font-bold mb-6">Task Manager App</h1>
+    <div className="min-h-screen bg-gray-100 text-black flex flex-col items-center p-6">
+      <h1 className="text-2xl font-bold mb-6">Task Manager</h1>
 
       {!token ? (
-        <div className="w-full max-w-md bg-gray-100 p-6 rounded-lg shadow-md">
+        // 👇 Login / Signup form
+        <div className="w-full max-w-md bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-xl mb-4">{mode === "login" ? "Login" : "Signup"}</h2>
 
           {mode === "signup" && (
@@ -91,7 +159,7 @@ export default function Home() {
 
           <button
             onClick={handleAuth}
-            className="w-full bg-blue-600 py-2 rounded mb-3 text-white"
+            className="w-full bg-blue-600 py-2 rounded mb-3 text-white hover:bg-blue-700"
           >
             {mode === "login" ? "Login" : "Signup"}
           </button>
@@ -107,20 +175,49 @@ export default function Home() {
           </p>
         </div>
       ) : (
+        // 👇 Task Manager (jab login ho jaye)
         <div className="w-full max-w-2xl">
           <button
             onClick={logout}
-            className="bg-red-500 px-4 py-2 rounded mb-6 text-white"
+            className="bg-red-500 px-4 py-2 rounded mb-6 text-white hover:bg-red-600"
           >
             Logout
           </button>
-          
-          <TaskForm token={token} refresh={() => setRefreshKey(prev => prev + 1)} />
-<TaskList token={token} refreshKey={refreshKey} />
 
+          {editTaskId ? (
+            <TaskForm
+              token={token}
+              refresh={refresh}
+              editTaskId={editTaskId}
+              editData={editData!}
+              cancelEdit={() => setEditTaskId(null)}
+              updateTask={async (id, title, description) => {
+                await fetch(`/api/tasks/${id}`, {
+                  method: "PUT",
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                  },
+                  body: JSON.stringify({ title, description }),
+                });
+                setEditTaskId(null);
+                refresh();
+              }}
+            />
+          ) : (
+            <TaskForm token={token} refresh={refresh} />
+          )}
+
+          <TaskList
+            token={token}
+            refreshKey={refreshKey}
+            onEdit={(id, title, description) => {
+              setEditTaskId(id);
+              setEditData({ title, description });
+            }}
+          />
         </div>
       )}
     </div>
   );
 }
-

@@ -53,12 +53,12 @@ export async function POST(req: Request) {
 }
 
 // app/api/tasks/route.ts
-export async function DELETE(req: Request) {
+export async function DELETE(req: Request, { params }: { params: { id: string } }) {
   await connectDB();
   const user = (await getUser(req)) as { id: string } | null;
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { id } = await req.json();
+  const id = params.id;
   if (!id) return NextResponse.json({ error: "Task ID is required" }, { status: 400 });
 
   try {
@@ -69,4 +69,5 @@ export async function DELETE(req: Request) {
     return NextResponse.json({ error: "Failed to delete task" }, { status: 500 });
   }
 }
+
 
